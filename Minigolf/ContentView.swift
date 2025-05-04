@@ -1,61 +1,84 @@
-//
-//  ContentView.swift
-//  Minigolf
-//
-//  Created by William Gyrulf on 2025-05-04.
-//
-
 import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @State private var playerCount = 2
+    @State private var roundCount = 1
+    @State private var playerNames: [String] = [""]
+    @State private var isPressed = false
+    @State private var navigateToGame = false
 
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+        NavigationStack{
+            VStack(spacing: 20) {
+                Text("Minigolf Scorecard")
+                    .font(.system(size: 30))
+                    .padding(.top, 40)
+                
+                Stepper("Spelare: \(playerCount)", value: $playerCount, in: 1...3)
+                    .font(.title2)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(10)
+                    .onChange(of: playerCount) { newValue in
+                        adjustPlayerNames(to: newValue)
                     }
+                
+                ForEach(0..<playerNames.count, id: \.self) { index in
+                    TextField("Namn på spelare \(index + 1)", text: $playerNames[index])
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding(.horizontal)
                 }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
+                
+                Stepper("Rundor: \(roundCount)", value: $roundCount, in: 1...4)
+                    .font(.title2)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(10)
+                
+                NavigationLink(destination: GameView(playerNames: playerNames, roundCount: roundCount), isActive: $navigateToGame) {
+                    EmptyView()
                 }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
+                
+                Button(action: {
+                    navigateToGame = true
+                }) {
+                    Text("Start")
+                        .font(.system(size: 30))
+                        .bold()
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 40)
+                        .padding(.vertical, 15)
+                        .background(isPressed ? Color.blue.opacity(0.7) : Color.blue)
+                        .cornerRadius(12)
+                        .scaleEffect(isPressed ? 0.95 : 1.0)
+                        .shadow(color: .gray.opacity(0.5), radius: 4, x: 0, y: 4)
+                }
+                .onLongPressGesture(minimumDuration: 0.01, pressing: { pressing in
+                    withAnimation(.easeInOut(duration: 0.1)) {
+                        isPressed = pressing
                     }
-                }
+                }, perform: {})
+                .offset(y: 20)
+                
+                Spacer()
             }
-        } detail: {
-            Text("Select an item")
+            .padding()
+            .onAppear {
+                adjustPlayerNames(to: playerCount)
+            }
         }
     }
 
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
-            }
+    func adjustPlayerNames(to count: Int) {
+        if playerNames.count < count {
+            playerNames.append(contentsOf: Array(repeating: "", count: count - playerNames.count))
+        } else if playerNames.count > count {
+            playerNames.removeLast(playerNames.count - count)
         }
     }
 }
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
 }

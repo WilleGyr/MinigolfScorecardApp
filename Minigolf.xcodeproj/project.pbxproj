@@ -15,6 +15,7 @@
 		B2559C5F2DC6CC810018E80A /* MinigolfTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2559C5E2DC6CC810018E80A /* MinigolfTests.swift */; };
 		B2559C692DC6CC810018E80A /* MinigolfUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2559C682DC6CC810018E80A /* MinigolfUITests.swift */; };
 		B2559C6B2DC6CC810018E80A /* MinigolfUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2559C6A2DC6CC810018E80A /* MinigolfUITestsLaunchTests.swift */; };
+		B2559C7C2DC7819A0018E80A /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2559C7B2DC7819A0018E80A /* GameView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,7 @@
 		B2559C642DC6CC810018E80A /* MinigolfUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MinigolfUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2559C682DC6CC810018E80A /* MinigolfUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinigolfUITests.swift; sourceTree = "<group>"; };
 		B2559C6A2DC6CC810018E80A /* MinigolfUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinigolfUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		B2559C7B2DC7819A0018E80A /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +100,7 @@
 			children = (
 				B2559C4B2DC6CC7F0018E80A /* MinigolfApp.swift */,
 				B2559C4D2DC6CC7F0018E80A /* ContentView.swift */,
+				B2559C7B2DC7819A0018E80A /* GameView.swift */,
 				B2559C4F2DC6CC7F0018E80A /* Item.swift */,
 				B2559C512DC6CC810018E80A /* Assets.xcassets */,
 				B2559C532DC6CC810018E80A /* Preview Content */,
@@ -262,6 +265,7 @@
 			files = (
 				B2559C4E2DC6CC7F0018E80A /* ContentView.swift in Sources */,
 				B2559C502DC6CC7F0018E80A /* Item.swift in Sources */,
+				B2559C7C2DC7819A0018E80A /* GameView.swift in Sources */,
 				B2559C4C2DC6CC7F0018E80A /* MinigolfApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
