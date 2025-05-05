@@ -1,0 +1,2 @@
+# Minigolf Scorecard App
+
