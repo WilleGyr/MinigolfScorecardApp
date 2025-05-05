@@ -5,8 +5,17 @@ struct GameView: View {
     var roundCount: Int
     let holeCount = 18
 
-    @State private var scores: [[[String]]] // [player][hole][round]
+    @State private var scores: [[[String]]]
     @State private var showResults = false
+    @State private var keyboardHeight: CGFloat = 0
+    
+    // Focus state for tracking the currently focused field
+    @FocusState private var focusedField: FocusedField?
+    @State private var selectedTab: Int = 0
+    
+    private enum FocusedField: Hashable {
+        case field(player: Int, hole: Int, round: Int)
+    }
 
     init(playerNames: [String], roundCount: Int) {
         self.playerNames = playerNames
@@ -25,7 +34,7 @@ struct GameView: View {
     var body: some View {
         NavigationStack {
             ZStack(alignment: .topTrailing) {
-                TabView {
+                TabView(selection: $selectedTab) {
                     ForEach(playerNames.indices, id: \.self) { playerIndex in
                         VStack {
                             Text(playerNames[playerIndex])
@@ -61,6 +70,11 @@ struct GameView: View {
                                                         .frame(width: 80)
                                                         .multilineTextAlignment(.center)
                                                         .textFieldStyle(RoundedBorderTextFieldStyle())
+                                                        .focused($focusedField, equals: .field(player: playerIndex, hole: holeIndex, round: roundIndex))
+                                                        .submitLabel(.next)
+                                                        .onSubmit {
+                                                            moveToNextField()
+                                                        }
                                                 }
                                             }
                                         }
@@ -99,11 +113,19 @@ struct GameView: View {
                         .tabItem {
                             Text(playerNames[playerIndex])
                         }
+                        .tag(playerIndex)
                     }
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
+                .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        Spacer()
+                        Button("Nästa") {
+                            moveToNextField()
+                        }
+                    }
+                }
 
-                // 👇 Button in top-right corner
                 NavigationLink(
                     destination: ResultsView(playerNames: playerNames, scores: scores, roundCount: roundCount),
                     isActive: $showResults
@@ -126,10 +148,37 @@ struct GameView: View {
                 .padding(.trailing, 20)
             }
         }
+        .onAppear {
+            // Set initial focus
+            focusedField = .field(player: 0, hole: 0, round: 0)
+        }
+    }
+    
+    private func moveToNextField() {
+        guard let currentField = focusedField else { return }
+        
+        switch currentField {
+        case .field(let player, let hole, let round):
+            // Try to move to next round first
+            if round < roundCount - 1 {
+                focusedField = .field(player: player, hole: hole, round: round + 1)
+            }
+            // Then try to move to next player
+            else if player < playerNames.count - 1 {
+                let newPlayer = player + 1
+                focusedField = .field(player: newPlayer, hole: hole, round: 0)
+                selectedTab = newPlayer // Update the tab selection
+            }
+            // Then try to move to next hole
+            else if hole < holeCount - 1 {
+                focusedField = .field(player: 0, hole: hole + 1, round: 0)
+                selectedTab = 0 // Reset to first player
+            }
+            // If we're at the last field, just stay there
+        }
     }
 }
 
-
 #Preview {
-    ContentView()
+    GameView(playerNames: ["Player 1", "Player 2"], roundCount: 2)
 }
