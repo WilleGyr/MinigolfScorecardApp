@@ -119,6 +119,9 @@ struct GameView: View {
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
                 .toolbar {
                     ToolbarItemGroup(placement: .keyboard) {
+                        Button("Tidigare") {
+                            moveToPreviousField()
+                        }
                         Spacer()
                         Button("Nästa") {
                             moveToNextField()
@@ -167,14 +170,38 @@ struct GameView: View {
             else if player < playerNames.count - 1 {
                 let newPlayer = player + 1
                 focusedField = .field(player: newPlayer, hole: hole, round: 0)
-                selectedTab = newPlayer // Update the tab selection
+                selectedTab = newPlayer
             }
             // Then try to move to next hole
             else if hole < holeCount - 1 {
                 focusedField = .field(player: 0, hole: hole + 1, round: 0)
-                selectedTab = 0 // Reset to first player
+                selectedTab = 0
             }
             // If we're at the last field, just stay there
+        }
+    }
+    
+    private func moveToPreviousField() {
+        guard let currentField = focusedField else { return }
+        
+        switch currentField {
+        case .field(let player, let hole, let round):
+            // Try to move to previous round first
+            if round > 0 {
+                focusedField = .field(player: player, hole: hole, round: round - 1)
+            }
+            // Then try to move to previous player
+            else if player > 0 {
+                let newPlayer = player - 1
+                focusedField = .field(player: newPlayer, hole: hole, round: roundCount - 1)
+                selectedTab = newPlayer
+            }
+            // Then try to move to previous hole
+            else if hole > 0 {
+                focusedField = .field(player: playerNames.count - 1, hole: hole - 1, round: roundCount - 1)
+                selectedTab = playerNames.count - 1
+            }
+            // If we're at the first field, just stay there
         }
     }
 }
