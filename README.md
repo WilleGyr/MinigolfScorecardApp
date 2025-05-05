@@ -18,13 +18,19 @@ A simple and elegant SwiftUI app for tracking scores in a round (or multiple rou
 
 | Start View | Game View | Results View |
 |------------|-----------|--------------|
-| ![](Images/Light/ContentView%20-%20Light.png) | ![](Images/Light/GameView%20-%20Light.png) | ![](Images/Light/ResultsView%20-%20Light.png) |
+| <img src="Images/Light/ContentView%20-%20Light.png" width="300" height="500" alt="Content View Light Mode">
+ | <img src="Images/Light/GameView%20-%20Light.png" width="300" height="500" alt="Game View Light Mode">
+ | <img src="Images/Light/ResultsView%20-%20Light.png" width="300" height="500" alt="Results View Light Mode">
+ |
 
 ### Dark Mode
 
 | Start View | Game View | Results View |
 |------------|-----------|--------------|
-| ![](Images/Dark/ContentView%20-%20Light.png) | ![](Images/Dark/GameView%20-%20Light.png) | ![](Images/Dark/ResultsView%20-%20Dark.png) |
+| <img src="Images/Dark/ContentView%20-%20Dark.png" width="300" height="500" alt="Content View Dark Mode">
+ | <img src="Images/Dark/GameView%20-%20Dark.png" width="300" height="500" alt="Game View Dark Mode">
+ | <img src="Images/Dark/ResultsView%20-%20Dark.png" width="300" height="500" alt="Results View Dark Mode">
+ |
 
 ## 🚀 Getting Started
 
