@@ -9,7 +9,6 @@ struct GameView: View {
     @State private var showResults = false
     @State private var keyboardHeight: CGFloat = 0
     
-    // Focus state for tracking the currently focused field
     @FocusState private var focusedField: FocusedField?
     @State private var selectedTab: Int = 0
     
@@ -114,6 +113,12 @@ struct GameView: View {
                             Text(playerNames[playerIndex])
                         }
                         .tag(playerIndex)
+                        .onChange(of: selectedTab) { newValue in
+                            if newValue == playerIndex {
+                                let currentHole = focusedHole
+                                focusedField = .field(player: playerIndex, hole: currentHole, round: 0)
+                            }
+                        }
                     }
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
@@ -152,9 +157,15 @@ struct GameView: View {
             }
         }
         .onAppear {
-            // Set initial focus
             focusedField = .field(player: 0, hole: 0, round: 0)
         }
+    }
+    
+    private var focusedHole: Int {
+        if case let .field(_, hole, _) = focusedField {
+            return hole
+        }
+        return 0
     }
     
     private func moveToNextField() {
@@ -162,22 +173,22 @@ struct GameView: View {
         
         switch currentField {
         case .field(let player, let hole, let round):
-            // Try to move to next round first
             if round < roundCount - 1 {
                 focusedField = .field(player: player, hole: hole, round: round + 1)
             }
-            // Then try to move to next player
             else if player < playerNames.count - 1 {
                 let newPlayer = player + 1
+                withAnimation {
+                    selectedTab = newPlayer
+                }
                 focusedField = .field(player: newPlayer, hole: hole, round: 0)
-                selectedTab = newPlayer
             }
-            // Then try to move to next hole
             else if hole < holeCount - 1 {
+                withAnimation {
+                    selectedTab = 0
+                }
                 focusedField = .field(player: 0, hole: hole + 1, round: 0)
-                selectedTab = 0
             }
-            // If we're at the last field, just stay there
         }
     }
     
@@ -186,26 +197,26 @@ struct GameView: View {
         
         switch currentField {
         case .field(let player, let hole, let round):
-            // Try to move to previous round first
             if round > 0 {
                 focusedField = .field(player: player, hole: hole, round: round - 1)
             }
-            // Then try to move to previous player
             else if player > 0 {
                 let newPlayer = player - 1
+                withAnimation {
+                    selectedTab = newPlayer
+                }
                 focusedField = .field(player: newPlayer, hole: hole, round: roundCount - 1)
-                selectedTab = newPlayer
             }
-            // Then try to move to previous hole
             else if hole > 0 {
+                withAnimation {
+                    selectedTab = playerNames.count - 1
+                }
                 focusedField = .field(player: playerNames.count - 1, hole: hole - 1, round: roundCount - 1)
-                selectedTab = playerNames.count - 1
             }
-            // If we're at the first field, just stay there
         }
     }
 }
 
 #Preview {
-    GameView(playerNames: ["Player 1", "Player 2"], roundCount: 2)
+    ContentView()
 }

@@ -53,7 +53,7 @@ struct ResultsView: View {
                             VStack {
                                 Text("\(total)")
                                 Text(relative == 0 ? "(0)" : (relative > 0 ? "+\(relative)" : "\(relative)"))
-                                    .foregroundColor(relative == 0 ? .black : (relative > 0 ? .red : .green))
+                                    .foregroundColor(relative == 0 ? .white : (relative > 0 ? .red : .green))
                                     .font(.subheadline)
                             }
                             .multilineTextAlignment(.center)
@@ -75,7 +75,7 @@ struct ResultsView: View {
 
                 
                 .padding()
-                .frame(maxWidth: 100)
+                .frame(maxWidth: 300)
                 .background(Color.gray.opacity(0.1))
                 .cornerRadius(10)
                 
