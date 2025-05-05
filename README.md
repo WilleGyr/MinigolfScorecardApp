@@ -66,10 +66,6 @@ A simple and intuitive **SwiftUI** app for tracking scores in a round (or multip
 - [x] CSV export
 - [x] Share results
 - [x] Light/Dark mode support
-- [ ] Hole-by-hole stats view
-- [ ] Player history
-- [ ] iCloud sync
-- [ ] Custom course templates
 
 ## 🪪 License
 
