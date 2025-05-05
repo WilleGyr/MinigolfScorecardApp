@@ -26,16 +26,20 @@ Keep score with:
 ✅ Light/Dark mode support  
 ✅ Free and open-source
 
-## 👀 Interface Preview
+## 👣 Walkthrough
 
-<div style="white-space: nowrap; overflow-x: auto;">
-  <img src="/Images/Light/ContentView%20-%20Light.png" width="180" style="margin-right:10px;">
-  <img src="/Images/Light/GameView%20-%20Light.png" width="180" style="margin-right:10px;">
-  <img src="/Images/Light/ResultsView%20-%20Light.png" width="180" style="margin-right:10px;">
-  <img src="/Images/Dark/ContentView%20-%20Dark.png" width="180" style="margin-right:10px;">
-  <img src="/Images/Dark/GameView%20-%20Dark.png" width="180" style="margin-right:10px;">
-  <img src="/Images/Dark/ResultsView%20-%20Dark.png" width="180">
-</div>
+**1. Start the app and choose players**
+
+<img src="Images/Dark/ContentView%20-%20Dark.png" width="300">
+
+**2. Enter scores per hole quickly**
+
+<img src="Images/Dark/GameView%20-%20Dark.png" width="300">
+
+**3. View results instantly and export if needed**
+
+<img src="Images/Dark/ResultsView%20-%20Dark.png" width="300">
+
 
 
 
