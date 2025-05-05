@@ -11,9 +11,9 @@ A simple and intuitive **SwiftUI** app for tracking scores in a round (or multip
 
 ## 📜 Table of Contents
 
-- [Features](#-features)
-- [Screenshots](#-screenshots)
-- [Getting Started](#-getting-started)
+- [Features](#features)
+- [Screenshots](#screenshots)
+- [Getting Started](#getting-started)
 - [Roadmap](#roadmap)
 - [License](#license)
 
