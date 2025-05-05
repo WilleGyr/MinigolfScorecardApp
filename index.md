@@ -26,18 +26,17 @@ Keep score with:
 ✅ Light/Dark mode support  
 ✅ Free and open-source
 
-## 📸 App Preview
+## 👀 Interface Preview
 
-<p align="center">
-  <img src="/Images/Dark/ContentView%20-%20Dark.png" width="200">
-  <img src="/Images/Dark/GameView%20-%20Dark.png" width="200">
-  <img src="/Images/Dark/ResultsView%20-%20Dark.png" width="200">
-</p>
-<p align="center">
-  <img src="/Images/Light/ContentView%20-%20Light.png" width="200">
-  <img src="/Images/Light/GameView%20-%20Light.png" width="200">
-  <img src="/Images/Light/ResultsView%20-%20Light.png" width="200">
-</p>
+<div style="white-space: nowrap; overflow-x: auto;">
+  <img src="/Images/Light/ContentView%20-%20Light.png" width="180" style="margin-right:10px;">
+  <img src="/Images/Light/GameView%20-%20Light.png" width="180" style="margin-right:10px;">
+  <img src="/Images/Light/ResultsView%20-%20Light.png" width="180" style="margin-right:10px;">
+  <img src="/Images/Dark/ContentView%20-%20Dark.png" width="180" style="margin-right:10px;">
+  <img src="/Images/Dark/GameView%20-%20Dark.png" width="180" style="margin-right:10px;">
+  <img src="/Images/Dark/ResultsView%20-%20Dark.png" width="180">
+</div>
+
 
 
 ---
