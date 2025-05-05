@@ -29,17 +29,17 @@ A simple and intuitive **SwiftUI** app for tracking scores in a round (or multip
 
 ## 📸 Screenshots
 
-### Light Mode
-
-| Start View | Game View | Results View |
-|------------|-----------|--------------|
-| <img src="Images/Light/ContentView%20-%20Light.png" width="250" alt="Content View Light Mode"> | <img src="Images/Light/GameView%20-%20Light.png" width="250" alt="Game View Light Mode"> | <img src="Images/Light/ResultsView%20-%20Light.png" width="250" alt="Results View Light Mode"> |
-
 ### Dark Mode
 
 | Start View | Game View | Results View |
 |------------|-----------|--------------|
 | <img src="Images/Dark/ContentView%20-%20Dark.png" width="250" alt="Content View Dark Mode"> | <img src="Images/Dark/GameView%20-%20Dark.png" width="250" alt="Game View Dark Mode"> | <img src="Images/Dark/ResultsView%20-%20Dark.png" width="250" alt="Results View Dark Mode"> |
+
+### Light Mode
+
+| Start View | Game View | Results View |
+|------------|-----------|--------------|
+| <img src="Images/Light/ContentView%20-%20Light.png" width="250" alt="Content View Light Mode"> | <img src="Images/Light/GameView%20-%20Light.png" width="250" alt="Game View Light Mode"> | <img src="Images/Light/ResultsView%20-%20Light.png" width="250" alt="Results View Light Mode"> |
 
 ## 🚀 Getting Started
 
