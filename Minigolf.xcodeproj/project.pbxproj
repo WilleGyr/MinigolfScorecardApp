@@ -20,6 +20,8 @@
 		B2559C802DC78C440018E80A /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2559C7F2DC78C440018E80A /* ShareSheet.swift */; };
 		B29E1DDD2DC8CB6200A67B79 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = B29E1DDC2DC8CB6200A67B79 /* README.md */; };
 		B29E1DDF2DC8E89500A67B79 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = B29E1DDE2DC8E89500A67B79 /* LICENSE */; };
+		B29E1DE12DC8EA8E00A67B79 /* _config.yml in Resources */ = {isa = PBXBuildFile; fileRef = B29E1DE02DC8EA8E00A67B79 /* _config.yml */; };
+		B29E1DE32DC8EB2000A67B79 /* index.md in Resources */ = {isa = PBXBuildFile; fileRef = B29E1DE22DC8EB2000A67B79 /* index.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +58,8 @@
 		B2559C7F2DC78C440018E80A /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		B29E1DDC2DC8CB6200A67B79 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		B29E1DDE2DC8E89500A67B79 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		B29E1DE02DC8EA8E00A67B79 /* _config.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = _config.yml; sourceTree = "<group>"; };
+		B29E1DE22DC8EB2000A67B79 /* index.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = index.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +90,8 @@
 		B2559C3F2DC6CC7F0018E80A = {
 			isa = PBXGroup;
 			children = (
+				B29E1DE02DC8EA8E00A67B79 /* _config.yml */,
+				B29E1DE22DC8EB2000A67B79 /* index.md */,
 				B29E1DDE2DC8E89500A67B79 /* LICENSE */,
 				B29E1DDC2DC8CB6200A67B79 /* README.md */,
 				B2559C4A2DC6CC7F0018E80A /* Minigolf */,
@@ -252,6 +258,8 @@
 				B29E1DDD2DC8CB6200A67B79 /* README.md in Resources */,
 				B2559C552DC6CC810018E80A /* Preview Assets.xcassets in Resources */,
 				B29E1DDF2DC8E89500A67B79 /* LICENSE in Resources */,
+				B29E1DE32DC8EB2000A67B79 /* index.md in Resources */,
+				B29E1DE12DC8EA8E00A67B79 /* _config.yml in Resources */,
 				B2559C522DC6CC810018E80A /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
