@@ -44,23 +44,35 @@ struct ResultsView: View {
                         .bold()
                         .multilineTextAlignment(.center)
 
-                    ForEach(0..<roundCount, id: \.self) { roundIndex in
-                        let total = scores[playerIndex].compactMap { Int($0[roundIndex]) }.reduce(0, +)
-                        let relative = total - 36
-                        HStack(spacing: 4) {
-                            Text("\(total)")
-                            
-                            if relative != 0 {
-                                Text("(\(relative >= 0 ? "+\(relative)" : "\(relative)"))")
-                                    .foregroundColor(relative > 0 ? .red : .green)
-                            } else {
-                                Text("(0)")
-                            }
-                        }
+                    // Round scores row
+                    HStack(spacing: 12) {
+                        ForEach(0..<roundCount, id: \.self) { roundIndex in
+                            let total = scores[playerIndex].compactMap { Int($0[roundIndex]) }.reduce(0, +)
+                            let relative = total - 36
 
+                            VStack {
+                                Text("\(total)")
+                                Text(relative == 0 ? "(0)" : (relative > 0 ? "+\(relative)" : "\(relative)"))
+                                    .foregroundColor(relative == 0 ? .black : (relative > 0 ? .red : .green))
+                                    .font(.subheadline)
+                            }
                             .multilineTextAlignment(.center)
+                        }
+                    }
+
+                    // Average row
+                    let totals = (0..<roundCount).map { roundIndex in
+                        scores[playerIndex].compactMap { Int($0[roundIndex]) }.reduce(0, +)
+                    }
+
+                    if !totals.isEmpty {
+                        let average = Double(totals.reduce(0, +)) / Double(totals.count)
+                        Text(String(format: "Snitt: %.1f", average))
+                            .font(.footnote)
+                            .foregroundColor(.blue)
                     }
                 }
+
                 
                 .padding()
                 .frame(maxWidth: 100)

@@ -16,6 +16,9 @@
 		B2559C692DC6CC810018E80A /* MinigolfUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2559C682DC6CC810018E80A /* MinigolfUITests.swift */; };
 		B2559C6B2DC6CC810018E80A /* MinigolfUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2559C6A2DC6CC810018E80A /* MinigolfUITestsLaunchTests.swift */; };
 		B2559C7C2DC7819A0018E80A /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2559C7B2DC7819A0018E80A /* GameView.swift */; };
+		B2559C7E2DC786840018E80A /* ResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2559C7D2DC786840018E80A /* ResultsView.swift */; };
+		B2559C802DC78C440018E80A /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2559C7F2DC78C440018E80A /* ShareSheet.swift */; };
+		B29E1DDD2DC8CB6200A67B79 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = B29E1DDC2DC8CB6200A67B79 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +51,9 @@
 		B2559C682DC6CC810018E80A /* MinigolfUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinigolfUITests.swift; sourceTree = "<group>"; };
 		B2559C6A2DC6CC810018E80A /* MinigolfUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinigolfUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		B2559C7B2DC7819A0018E80A /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
+		B2559C7D2DC786840018E80A /* ResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsView.swift; sourceTree = "<group>"; };
+		B2559C7F2DC78C440018E80A /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
+		B29E1DDC2DC8CB6200A67B79 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +84,7 @@
 		B2559C3F2DC6CC7F0018E80A = {
 			isa = PBXGroup;
 			children = (
+				B29E1DDC2DC8CB6200A67B79 /* README.md */,
 				B2559C4A2DC6CC7F0018E80A /* Minigolf */,
 				B2559C5D2DC6CC810018E80A /* MinigolfTests */,
 				B2559C672DC6CC810018E80A /* MinigolfUITests */,
@@ -101,6 +108,8 @@
 				B2559C4B2DC6CC7F0018E80A /* MinigolfApp.swift */,
 				B2559C4D2DC6CC7F0018E80A /* ContentView.swift */,
 				B2559C7B2DC7819A0018E80A /* GameView.swift */,
+				B2559C7D2DC786840018E80A /* ResultsView.swift */,
+				B2559C7F2DC78C440018E80A /* ShareSheet.swift */,
 				B2559C4F2DC6CC7F0018E80A /* Item.swift */,
 				B2559C512DC6CC810018E80A /* Assets.xcassets */,
 				B2559C532DC6CC810018E80A /* Preview Content */,
@@ -237,6 +246,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B29E1DDD2DC8CB6200A67B79 /* README.md in Resources */,
 				B2559C552DC6CC810018E80A /* Preview Assets.xcassets in Resources */,
 				B2559C522DC6CC810018E80A /* Assets.xcassets in Resources */,
 			);
@@ -264,8 +274,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2559C4E2DC6CC7F0018E80A /* ContentView.swift in Sources */,
+				B2559C802DC78C440018E80A /* ShareSheet.swift in Sources */,
 				B2559C502DC6CC7F0018E80A /* Item.swift in Sources */,
 				B2559C7C2DC7819A0018E80A /* GameView.swift in Sources */,
+				B2559C7E2DC786840018E80A /* ResultsView.swift in Sources */,
 				B2559C4C2DC6CC7F0018E80A /* MinigolfApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -430,8 +442,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Minigolf/Preview Content\"";
+				DEVELOPMENT_TEAM = 2M99T5SYYT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Minigolf;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -458,8 +472,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Minigolf/Preview Content\"";
+				DEVELOPMENT_TEAM = 2M99T5SYYT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Minigolf;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
