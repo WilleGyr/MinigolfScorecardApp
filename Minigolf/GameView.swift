@@ -74,6 +74,15 @@ struct GameView: View {
                                                         .onSubmit {
                                                             moveToNextField()
                                                         }
+                                                        .onChange(of: scores[playerIndex][holeIndex][roundIndex]) { newValue in
+                                                            // Only move to next field if the new value is not empty
+                                                            if !newValue.isEmpty {
+                                                                // Add a small delay to allow the keyboard to update
+                                                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                                                    moveToNextField()
+                                                                }
+                                                            }
+                                                        }
                                                 }
                                             }
                                         }
@@ -88,15 +97,14 @@ struct GameView: View {
                                                 .frame(width: 40)
 
                                             ForEach(0..<roundCount, id: \.self) { roundIndex in
-                                                let total = scores[playerIndex].compactMap { Int($0[roundIndex]) }.reduce(0, +)
-                                                let relative = total - 36
+                                                let validScores = scores[playerIndex].compactMap { Int($0[roundIndex]) }
+                                                let holesPlayed = validScores.count
+                                                let total = validScores.reduce(0, +)
+                                                let relative = total - (2 * holesPlayed)
 
                                                 VStack {
-                                                    Text("\(total)")
-                                                        .frame(width: 80)
-                                                        .multilineTextAlignment(.center)
-                                                    Text(relative >= 0 ? "+\(relative)" : "\(relative)")
-                                                        .foregroundColor(relative == 0 ? .black : (relative > 0 ? .red : .green))
+                                                    Text(relative == 0 ? "+0" : (relative > 0 ? "+\(relative)" : "\(relative)"))
+                                                        .foregroundColor(relative == 0 ? .white : (relative > 0 ? .red : .green))
                                                         .font(.subheadline)
                                                 }
                                             }
@@ -218,5 +226,8 @@ struct GameView: View {
 }
 
 #Preview {
-    ContentView()
+    GameView(
+        playerNames: ["Player 1", "Player 2", "Player 3"],
+        roundCount: 2
+    )
 }
