@@ -71,6 +71,20 @@ struct ResultsView: View {
                             .font(.footnote)
                             .foregroundColor(.blue)
                     }
+                    // Räkna antal 1:or, 2:or, 3:or
+                    let flattenedScores = scores[playerIndex].flatMap { $0 }
+                    let ones = flattenedScores.filter { $0 == "1" }.count
+                    let twos = flattenedScores.filter { $0 == "2" }.count
+                    let threes = flattenedScores.filter { $0 == "3" }.count
+
+                    HStack(spacing: 5) {
+                        Text("\(ones)")
+                        Text("/ \(twos)")
+                        Text("/ \(threes)")
+                    }
+                    .font(.caption)
+                    .foregroundColor(.gray)
+
                 }
 
                 
