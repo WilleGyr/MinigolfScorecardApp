@@ -164,6 +164,7 @@ struct TextFile: FileDocument {
     }
 }
 
+// Preview
 #Preview {
     ContentView()
 }
