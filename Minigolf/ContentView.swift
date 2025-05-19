@@ -7,6 +7,8 @@ struct ContentView: View {
     @State private var playerNames: [String] = [""]
     @State private var isPressed = false
     @State private var navigateToGame = false
+    let availableNames = ["W", "A", "D"]
+
 
     var body: some View {
         NavigationStack{

@@ -8,10 +8,10 @@ struct GameView: View {
     @State private var scores: [[[String]]]
     @State private var showResults = false
     @State private var keyboardHeight: CGFloat = 0
-    
+
     @FocusState private var focusedField: FocusedField?
     @State private var selectedTab: Int = 0
-    
+
     private enum FocusedField: Hashable {
         case field(player: Int, hole: Int, round: Int)
     }
@@ -35,87 +35,90 @@ struct GameView: View {
             ZStack(alignment: .topTrailing) {
                 TabView(selection: $selectedTab) {
                     ForEach(playerNames.indices, id: \.self) { playerIndex in
-                        VStack {
-                            Text(playerNames[playerIndex])
-                                .font(.title)
-                                .padding(.top)
+                        ZStack {
+                            backgroundColor(for: playerNames[playerIndex])
+                                .ignoresSafeArea()
 
-                            ScrollView(.horizontal) {
-                                ScrollView(.vertical) {
-                                    VStack(spacing: 1) {
-                                        // Header row
-                                        HStack(spacing: 1) {
-                                            Text("Hål")
-                                                .frame(width: 40)
-                                                .bold()
-                                            ForEach(0..<roundCount, id: \.self) { roundIndex in
-                                                Text("Runda \(roundIndex + 1)")
-                                                    .frame(width: 80)
-                                                    .bold()
-                                            }
-                                        }
+                            VStack {
+                                Text(playerNames[playerIndex])
+                                    .font(.title)
+                                    .padding(.top)
 
-                                        Divider()
-
-                                        // Hole rows
-                                        ForEach(0..<holeCount, id: \.self) { holeIndex in
+                                ScrollView(.horizontal) {
+                                    ScrollView(.vertical) {
+                                        VStack(spacing: 1) {
+                                            // Header row
                                             HStack(spacing: 1) {
-                                                Text("\(holeIndex + 1)")
+                                                Text("Hål")
+                                                    .frame(width: 40)
+                                                    .bold()
+                                                ForEach(0..<roundCount, id: \.self) { roundIndex in
+                                                    Text("Runda \(roundIndex + 1)")
+                                                        .frame(width: 80)
+                                                        .bold()
+                                                }
+                                            }
+
+                                            Divider()
+
+                                            // Hole rows
+                                            ForEach(0..<holeCount, id: \.self) { holeIndex in
+                                                HStack(spacing: 1) {
+                                                    Text("\(holeIndex + 1)")
+                                                        .frame(width: 40)
+
+                                                    ForEach(0..<roundCount, id: \.self) { roundIndex in
+                                                        TextField("-", text: $scores[playerIndex][holeIndex][roundIndex])
+                                                            .keyboardType(.numberPad)
+                                                            .frame(width: 80)
+                                                            .multilineTextAlignment(.center)
+                                                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                                                            .focused($focusedField, equals: .field(player: playerIndex, hole: holeIndex, round: roundIndex))
+                                                            .submitLabel(.next)
+                                                            .onSubmit {
+                                                                moveToNextField()
+                                                            }
+                                                            .onChange(of: scores[playerIndex][holeIndex][roundIndex]) { newValue in
+                                                                if !newValue.isEmpty {
+                                                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                                                        moveToNextField()
+                                                                    }
+                                                                }
+                                                            }
+                                                    }
+                                                }
+                                            }
+
+                                            Divider()
+                                            Text("Score")
+                                                .font(.headline)
+                                                .padding(.top)
+
+                                            HStack(spacing: 1) {
+                                                Text(" ")
                                                     .frame(width: 40)
 
                                                 ForEach(0..<roundCount, id: \.self) { roundIndex in
-                                                    TextField("-", text: $scores[playerIndex][holeIndex][roundIndex])
-                                                        .keyboardType(.numberPad)
-                                                        .frame(width: 80)
-                                                        .multilineTextAlignment(.center)
-                                                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                                                        .focused($focusedField, equals: .field(player: playerIndex, hole: holeIndex, round: roundIndex))
-                                                        .submitLabel(.next)
-                                                        .onSubmit {
-                                                            moveToNextField()
-                                                        }
-                                                        .onChange(of: scores[playerIndex][holeIndex][roundIndex]) { newValue in
-                                                            // Only move to next field if the new value is not empty
-                                                            if !newValue.isEmpty {
-                                                                // Add a small delay to allow the keyboard to update
-                                                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                                                    moveToNextField()
-                                                                }
-                                                            }
-                                                        }
+                                                    let validScores = scores[playerIndex].compactMap { Int($0[roundIndex]) }
+                                                    let holesPlayed = validScores.count
+                                                    let total = validScores.reduce(0, +)
+                                                    let relative = total - (2 * holesPlayed)
+
+                                                    VStack {
+                                                        Text(relative == 0 ? "+0" : (relative > 0 ? "+\(relative)" : "\(relative)"))
+                                                            .foregroundColor(relative == 0 ? .white : (relative > 0 ? .red : .green))
+                                                            .font(.subheadline)
+                                                    }
                                                 }
                                             }
-                                        }
-
-                                        Divider()
-                                        Text("Score")
-                                            .font(.headline)
                                             .padding(.top)
-
-                                        HStack(spacing: 1) {
-                                            Text(" ")
-                                                .frame(width: 40)
-
-                                            ForEach(0..<roundCount, id: \.self) { roundIndex in
-                                                let validScores = scores[playerIndex].compactMap { Int($0[roundIndex]) }
-                                                let holesPlayed = validScores.count
-                                                let total = validScores.reduce(0, +)
-                                                let relative = total - (2 * holesPlayed)
-
-                                                VStack {
-                                                    Text(relative == 0 ? "+0" : (relative > 0 ? "+\(relative)" : "\(relative)"))
-                                                        .foregroundColor(relative == 0 ? .white : (relative > 0 ? .red : .green))
-                                                        .font(.subheadline)
-                                                }
-                                            }
                                         }
-                                        .padding(.top)
+                                        .padding()
                                     }
-                                    .padding()
                                 }
-                            }
 
-                            Spacer()
+                                Spacer()
+                            }
                         }
                         .tabItem {
                             Text(playerNames[playerIndex])
@@ -168,30 +171,28 @@ struct GameView: View {
             focusedField = .field(player: 0, hole: 0, round: 0)
         }
     }
-    
+
     private var focusedHole: Int {
         if case let .field(_, hole, _) = focusedField {
             return hole
         }
         return 0
     }
-    
+
     private func moveToNextField() {
         guard let currentField = focusedField else { return }
-        
+
         switch currentField {
         case .field(let player, let hole, let round):
             if round < roundCount - 1 {
                 focusedField = .field(player: player, hole: hole, round: round + 1)
-            }
-            else if player < playerNames.count - 1 {
+            } else if player < playerNames.count - 1 {
                 let newPlayer = player + 1
                 withAnimation {
                     selectedTab = newPlayer
                 }
                 focusedField = .field(player: newPlayer, hole: hole, round: 0)
-            }
-            else if hole < holeCount - 1 {
+            } else if hole < holeCount - 1 {
                 withAnimation {
                     selectedTab = 0
                 }
@@ -199,23 +200,21 @@ struct GameView: View {
             }
         }
     }
-    
+
     private func moveToPreviousField() {
         guard let currentField = focusedField else { return }
-        
+
         switch currentField {
         case .field(let player, let hole, let round):
             if round > 0 {
                 focusedField = .field(player: player, hole: hole, round: round - 1)
-            }
-            else if player > 0 {
+            } else if player > 0 {
                 let newPlayer = player - 1
                 withAnimation {
                     selectedTab = newPlayer
                 }
                 focusedField = .field(player: newPlayer, hole: hole, round: roundCount - 1)
-            }
-            else if hole > 0 {
+            } else if hole > 0 {
                 withAnimation {
                     selectedTab = playerNames.count - 1
                 }
@@ -223,11 +222,24 @@ struct GameView: View {
             }
         }
     }
+
+    private func backgroundColor(for name: String) -> Color {
+        switch name.uppercased() {
+        case "W":
+            return Color.blue.opacity(0.2)
+        case "A":
+            return Color.green.opacity(0.2)
+        case "D":
+            return Color.red.opacity(0.2)
+        default:
+            return Color.gray.opacity(0.05)
+        }
+    }
 }
 
 #Preview {
     GameView(
-        playerNames: ["Player 1", "Player 2", "Player 3"],
+        playerNames: ["W", "A", "D"],
         roundCount: 2
     )
 }

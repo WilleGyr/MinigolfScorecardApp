@@ -12,7 +12,7 @@ import SwiftData
 struct GolfScoreApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            PlayerOrderView()
         }
     }
 }
