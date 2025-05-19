@@ -2,6 +2,7 @@ import SwiftUI
 
 struct PlayerOrderView: View {
     let allPlayers = ["W", "A", "D"]
+    let roundOptions = [1, 2, 3, 4]
     
     @State private var selectedPlayers: [String] = []
     @State private var roundCount: Int = 1
@@ -43,14 +44,24 @@ struct PlayerOrderView: View {
                         .foregroundColor(.blue)
                 }
 
-                // Val av rundor
-                VStack {
-                    Stepper("Rundor: \(roundCount)", value: $roundCount, in: 1...4)
-                        .font(.title3)
-                        .padding()
-                        .background(Color.gray.opacity(0.2))
-                        .cornerRadius(10)
-                        .padding(.horizontal)
+                // Rundor - välj med knappar
+                VStack(spacing: 10) {
+                    Text("Antal rundor")
+                        .font(.headline)
+                    HStack(spacing: 20) {
+                        ForEach(roundOptions, id: \.self) { option in
+                            Button(action: {
+                                roundCount = option
+                            }) {
+                                Text("\(option)")
+                                    .font(.title2)
+                                    .frame(width: 60, height: 60)
+                                    .background(roundCount == option ? Color.gray.opacity(0.3) : Color.green)
+                                    .foregroundColor(.white)
+                                    .clipShape(Circle())
+                            }
+                        }
+                    }
                 }
 
                 // Startknapp när minst 2 spelare är valda
