@@ -48,13 +48,16 @@ struct GameView: View {
                                             }
                                         }) {
                                             Text(playerNames[index])
-                                                .font(.headline)
-                                                .padding(.horizontal, 12)
-                                                .padding(.vertical, 8)
-                                                .background(selectedTab == index ? Color.blue.opacity(0.3) : Color.clear)
-                                                .cornerRadius(10)
+                                                .font(.system(size: 20, weight: .bold))
+                                                .frame(width: 40, height: 40)
+                                                .background(selectedTab == index ? Color.gray.opacity(0.3) : Color.blue)
+                                                .foregroundColor(.white)
+                                                .clipShape(Circle())
+                                                .padding(5)
+
                                         }
                                     }
+
                                 }
                                 .padding(.top)
 
@@ -162,15 +165,20 @@ struct GameView: View {
                 }) {
                     Text("Avsluta")
                         .font(.headline)
-                        .foregroundColor(.red)
-                        .padding(.horizontal, 16)
+                        .bold()
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 10)
                         .padding(.vertical, 10)
-                        .background(Color.red.opacity(0.2))
-                        .cornerRadius(8)
-                        .contentShape(Rectangle())
+                        .background(Color.red)
+                        .cornerRadius(10)
+                        .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
                 }
-                .padding(.trailing, 20)
+                .padding(.trailing, 10)
+                .padding(.top, 20)
+
             }
+            .toolbarBackground(backgroundColor(for: playerNames[selectedTab]), for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
         }
         .onAppear {
             focusedField = .field(player: 0, hole: 0, round: 0)

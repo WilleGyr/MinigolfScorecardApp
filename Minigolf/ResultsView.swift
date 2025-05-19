@@ -27,19 +27,34 @@ struct ResultsView: View {
                 .font(.largeTitle)
                 .bold()
                 .padding(.top)
-            Button("Spara resultat") {
+            Button(action: {
                 let csv = generateCSVText()
                 exportFile = TextFile(initialText: csv)
                 showExporter = true
+            }) {
+                Text("Spara resultat")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 12)
+                    .background(Color.blue)
+                    .cornerRadius(12)
+                    .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
             }
 
-            .font(.headline)
-            .padding()
-            .background(Color.blue.opacity(0.2))
-            .cornerRadius(8)
             ForEach(playerNames.indices, id: \.self) { playerIndex in
+                let playerName = playerNames[playerIndex]
+                let backgroundColor: Color = {
+                    switch playerName {
+                    case "W": return .blue .opacity(0.4)
+                    case "A": return .green .opacity(0.4)
+                    case "D": return .red .opacity(0.4)
+                    default: return .gray.opacity(0.2) // fallback
+                    }
+                }()
+
                 VStack(spacing: 10) {
-                    Text(playerNames[playerIndex])
+                    Text(playerName)
                         .font(.title2)
                         .bold()
                         .multilineTextAlignment(.center)
@@ -60,7 +75,7 @@ struct ResultsView: View {
                         }
                     }
 
-                    // Average row
+                    // Average
                     let totals = (0..<roundCount).map { roundIndex in
                         scores[playerIndex].compactMap { Int($0[roundIndex]) }.reduce(0, +)
                     }
@@ -69,9 +84,10 @@ struct ResultsView: View {
                         let average = Double(totals.reduce(0, +)) / Double(totals.count)
                         Text(String(format: "Snitt: %.1f", average))
                             .font(.footnote)
-                            .foregroundColor(.blue)
+                            .foregroundColor(.white.opacity(0.8))
                     }
-                    // Räkna antal 1:or, 2:or, 3:or
+
+                    // Count of 1s, 2s, 3s
                     let flattenedScores = scores[playerIndex].flatMap { $0 }
                     let ones = flattenedScores.filter { $0 == "1" }.count
                     let twos = flattenedScores.filter { $0 == "2" }.count
@@ -83,17 +99,15 @@ struct ResultsView: View {
                         Text("/ \(threes)")
                     }
                     .font(.caption)
-                    .foregroundColor(.gray)
+                    .foregroundColor(.white.opacity(0.7))
 
                 }
-
-                
                 .padding()
-                .frame(maxWidth: 300)
-                .background(Color.gray.opacity(0.1))
-                .cornerRadius(10)
-                
+                .background(backgroundColor.gradient.opacity(0.9))
+                .cornerRadius(16)
+                .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 4)
             }
+
             
 
             Spacer()
@@ -166,5 +180,8 @@ struct TextFile: FileDocument {
 
 // Preview
 #Preview {
-    ContentView()
+    GameView(
+        playerNames: ["W", "A", "D"],
+        roundCount: 4
+    )
 }
