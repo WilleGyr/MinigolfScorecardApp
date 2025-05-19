@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B213923A2DDB4E0A002EBBD2 /* PlayerOrderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21392392DDB4E0A002EBBD2 /* PlayerOrderView.swift */; };
 		B2559C4C2DC6CC7F0018E80A /* MinigolfApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2559C4B2DC6CC7F0018E80A /* MinigolfApp.swift */; };
 		B2559C4E2DC6CC7F0018E80A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2559C4D2DC6CC7F0018E80A /* ContentView.swift */; };
 		B2559C502DC6CC7F0018E80A /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2559C4F2DC6CC7F0018E80A /* Item.swift */; };
@@ -42,6 +43,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B21392392DDB4E0A002EBBD2 /* PlayerOrderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerOrderView.swift; sourceTree = "<group>"; };
 		B2559C482DC6CC7F0018E80A /* Minigolf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Minigolf.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2559C4B2DC6CC7F0018E80A /* MinigolfApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MinigolfApp.swift; sourceTree = "<group>"; };
 		B2559C4D2DC6CC7F0018E80A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 			children = (
 				B2559C4B2DC6CC7F0018E80A /* MinigolfApp.swift */,
 				B2559C4D2DC6CC7F0018E80A /* ContentView.swift */,
+				B21392392DDB4E0A002EBBD2 /* PlayerOrderView.swift */,
 				B2559C7B2DC7819A0018E80A /* GameView.swift */,
 				B2559C7D2DC786840018E80A /* ResultsView.swift */,
 				B2559C7F2DC78C440018E80A /* ShareSheet.swift */,
@@ -288,6 +291,7 @@
 				B2559C4E2DC6CC7F0018E80A /* ContentView.swift in Sources */,
 				B2559C802DC78C440018E80A /* ShareSheet.swift in Sources */,
 				B2559C502DC6CC7F0018E80A /* Item.swift in Sources */,
+				B213923A2DDB4E0A002EBBD2 /* PlayerOrderView.swift in Sources */,
 				B2559C7C2DC7819A0018E80A /* GameView.swift in Sources */,
 				B2559C7E2DC786840018E80A /* ResultsView.swift in Sources */,
 				B2559C4C2DC6CC7F0018E80A /* MinigolfApp.swift in Sources */,
