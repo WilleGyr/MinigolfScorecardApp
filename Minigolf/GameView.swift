@@ -40,9 +40,23 @@ struct GameView: View {
                                 .ignoresSafeArea()
 
                             VStack {
-                                Text(playerNames[playerIndex])
-                                    .font(.title)
-                                    .padding(.top)
+                                HStack(spacing: 8) {
+                                    ForEach(playerNames.indices, id: \.self) { index in
+                                        Button(action: {
+                                            withAnimation {
+                                                selectedTab = index
+                                            }
+                                        }) {
+                                            Text(playerNames[index])
+                                                .font(.headline)
+                                                .padding(.horizontal, 12)
+                                                .padding(.vertical, 8)
+                                                .background(selectedTab == index ? Color.blue.opacity(0.3) : Color.clear)
+                                                .cornerRadius(10)
+                                        }
+                                    }
+                                }
+                                .padding(.top)
 
                                 ScrollView(.horizontal) {
                                     ScrollView(.vertical) {
@@ -89,31 +103,31 @@ struct GameView: View {
                                                 }
                                             }
 
-                                            Divider()
-                                            Text("Score")
-                                                .font(.headline)
-                                                .padding(.top)
-
-                                            HStack(spacing: 1) {
-                                                Text(" ")
-                                                    .frame(width: 40)
-
-                                                ForEach(0..<roundCount, id: \.self) { roundIndex in
-                                                    let validScores = scores[playerIndex].compactMap { Int($0[roundIndex]) }
-                                                    let holesPlayed = validScores.count
-                                                    let total = validScores.reduce(0, +)
-                                                    let relative = total - (2 * holesPlayed)
-
-                                                    VStack {
-                                                        Text(relative == 0 ? "+0" : (relative > 0 ? "+\(relative)" : "\(relative)"))
-                                                            .foregroundColor(relative == 0 ? .white : (relative > 0 ? .red : .green))
-                                                            .font(.subheadline)
-                                                    }
-                                                }
-                                            }
-                                            .padding(.top)
                                         }
                                         .padding()
+                                        Divider()
+                                        Text("Score")
+                                            .font(.headline)
+                                            .padding(.top)
+
+                                        HStack(spacing: 1) {
+                                            Text(" ")
+                                                .frame(width: 40)
+
+                                            ForEach(0..<roundCount, id: \.self) { roundIndex in
+                                                let validScores = scores[playerIndex].compactMap { Int($0[roundIndex]) }
+                                                let holesPlayed = validScores.count
+                                                let total = validScores.reduce(0, +)
+                                                let relative = total - (2 * holesPlayed)
+
+                                                VStack {
+                                                    Text(relative == 0 ? "+0" : (relative > 0 ? "+\(relative)" : "\(relative)"))
+                                                        .foregroundColor(relative == 0 ? .white : (relative > 0 ? .red : .green))
+                                                        .font(.subheadline)
+                                                }
+                                            }
+                                        }
+                                        .padding(.top)
                                     }
                                 }
 
@@ -134,15 +148,6 @@ struct GameView: View {
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
                 .toolbar {
-                    ToolbarItemGroup(placement: .keyboard) {
-                        Button("Tidigare") {
-                            moveToPreviousField()
-                        }
-                        Spacer()
-                        Button("Nästa") {
-                            moveToNextField()
-                        }
-                    }
                 }
 
                 NavigationLink(
