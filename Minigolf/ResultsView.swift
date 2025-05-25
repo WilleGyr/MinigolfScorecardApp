@@ -16,17 +16,23 @@ struct ResultsView: View {
                     .bold()
 
                 ForEach(playerNames.indices, id: \.self) { playerIndex in
-                    PlayerResultCard(
-                        playerName: playerNames[playerIndex],
-                        scores: scores[playerIndex],
-                        roundCount: roundCount,
-                        isExpanded: expandedPlayer == playerIndex,
-                        onToggleExpand: {
-                            withAnimation {
-                                expandedPlayer = (expandedPlayer == playerIndex ? nil : playerIndex)
+                    Button(action: {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            if expandedPlayer == playerIndex {
+                                expandedPlayer = nil
+                            } else {
+                                expandedPlayer = playerIndex
                             }
                         }
-                    )
+                    }) {
+                        PlayerResultCard(
+                            playerName: playerNames[playerIndex],
+                            scores: scores[playerIndex],
+                            roundCount: roundCount,
+                            isExpanded: expandedPlayer == playerIndex
+                        )
+                    }
+                    .buttonStyle(PlainButtonStyle())
                 }
             }
             .padding()
@@ -39,10 +45,9 @@ struct PlayerResultCard: View {
     let scores: [[String]] // [hole][round]
     let roundCount: Int
     let isExpanded: Bool
-    let onToggleExpand: () -> Void
 
     var body: some View {
-        Button(action: onToggleExpand) {
+        VStack(spacing: 12) {
             VStack(spacing: 12) {
                 Text(playerName)
                     .font(.title2)
@@ -63,8 +68,10 @@ struct PlayerResultCard: View {
                         }
                     }
                 }
+            }
 
-                if isExpanded {
+            if isExpanded {
+                VStack(spacing: 12) {
                     ScorePerRoundChart(scores: scores)
                         .frame(height: 150)
 
@@ -74,14 +81,14 @@ struct PlayerResultCard: View {
                     DeltaOverTimeChart(scores: scores)
                         .frame(height: 150)
                 }
+                .transition(.opacity.combined(with: .move(edge: .top)))
             }
-            .padding()
-            .background(backgroundColor(for: playerName))
-            .cornerRadius(16)
-            .shadow(radius: 4)
-            .animation(.easeInOut(duration: 0.3), value: isExpanded)
         }
-        .buttonStyle(PlainButtonStyle())
+        .padding()
+        .background(backgroundColor(for: playerName))
+        .cornerRadius(16)
+        .shadow(radius: 4)
+        .animation(.easeInOut(duration: 0.3), value: isExpanded)
     }
 
     private func backgroundColor(for name: String) -> Color {
