@@ -87,9 +87,12 @@ struct GameView: View {
                                                     ForEach(0..<roundCount, id: \.self) { roundIndex in
                                                         TextField("-", text: $scores[playerIndex][holeIndex][roundIndex])
                                                             .keyboardType(.numberPad)
+                                                            .autocorrectionDisabled(true)
+                                                            .textInputAutocapitalization(.never)
                                                             .frame(width: 80)
                                                             .multilineTextAlignment(.center)
                                                             .textFieldStyle(RoundedBorderTextFieldStyle())
+                                                            .foregroundColor(colorForScore(scores[playerIndex][holeIndex][roundIndex])) // <-- Add this line
                                                             .focused($focusedField, equals: .field(player: playerIndex, hole: holeIndex, round: roundIndex))
                                                             .submitLabel(.next)
                                                             .onSubmit {
@@ -103,6 +106,7 @@ struct GameView: View {
                                                                 }
                                                             }
                                                     }
+
                                                 }
                                             }
 
@@ -191,6 +195,16 @@ struct GameView: View {
         }
         return 0
     }
+    
+    private func colorForScore(_ score: String) -> Color {
+        switch score {
+        case "1": return .green
+        case "2": return .yellow
+        case "3": return .red
+        default: return .primary
+        }
+    }
+
 
     private func moveToNextField() {
         guard let currentField = focusedField else { return }
@@ -204,15 +218,21 @@ struct GameView: View {
                 withAnimation {
                     selectedTab = newPlayer
                 }
-                focusedField = .field(player: newPlayer, hole: hole, round: 0)
+                // Wait for tab switch to finish before setting focus
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    focusedField = .field(player: newPlayer, hole: hole, round: 0)
+                }
             } else if hole < holeCount - 1 {
                 withAnimation {
                     selectedTab = 0
                 }
-                focusedField = .field(player: 0, hole: hole + 1, round: 0)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    focusedField = .field(player: 0, hole: hole + 1, round: 0)
+                }
             }
         }
     }
+
 
     private func moveToPreviousField() {
         guard let currentField = focusedField else { return }
@@ -253,6 +273,6 @@ struct GameView: View {
 #Preview {
     GameView(
         playerNames: ["W", "A", "D"],
-        roundCount: 2
+        roundCount: 4
     )
 }
