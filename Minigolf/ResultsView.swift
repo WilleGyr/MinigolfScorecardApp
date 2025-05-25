@@ -1,180 +1,162 @@
-//
-//  ResultsView.swift
-//  Minigolf
-//
-//  Created by William Gyrulf on 2025-05-04.
-//
-
 import SwiftUI
+import Charts
 
 struct ResultsView: View {
-    @State private var saveConfirmation = false
-    @State private var saveError = false
-    @State private var fileToShare: URL?
-    @State private var isSharing = false
-    @State private var showExporter = false
-    @State private var exportFile: TextFile?
-    @State private var exportFileName = "MinigolfResultat"
-
-
     let playerNames: [String]
     let scores: [[[String]]] // [player][hole][round]
     let roundCount: Int
 
+    @State private var expandedPlayer: Int? = nil
+
     var body: some View {
-        VStack(spacing: 20) {
-            Text("Resultat")
-                .font(.largeTitle)
-                .bold()
-                .padding(.top)
-            Button(action: {
-                let csv = generateCSVText()
-                exportFile = TextFile(initialText: csv)
-                showExporter = true
-            }) {
-                Text("Spara resultat")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 24)
-                    .padding(.vertical, 12)
-                    .background(Color.blue)
-                    .cornerRadius(12)
-                    .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
-            }
+        ScrollView {
+            VStack(spacing: 20) {
+                Text("Resultat")
+                    .font(.largeTitle)
+                    .bold()
 
-            ForEach(playerNames.indices, id: \.self) { playerIndex in
-                let playerName = playerNames[playerIndex]
-                let backgroundColor: Color = {
-                    switch playerName {
-                    case "W": return .blue .opacity(0.4)
-                    case "A": return .green .opacity(0.4)
-                    case "D": return .red .opacity(0.4)
-                    default: return .gray.opacity(0.2) // fallback
-                    }
-                }()
-
-                VStack(spacing: 10) {
-                    Text(playerName)
-                        .font(.title2)
-                        .bold()
-                        .multilineTextAlignment(.center)
-
-                    // Round scores row
-                    HStack(spacing: 12) {
-                        ForEach(0..<roundCount, id: \.self) { roundIndex in
-                            let total = scores[playerIndex].compactMap { Int($0[roundIndex]) }.reduce(0, +)
-                            let relative = total - 36
-
-                            VStack {
-                                Text("\(total)")
-                                Text(relative == 0 ? "(0)" : (relative > 0 ? "+\(relative)" : "\(relative)"))
-                                    .foregroundColor(relative == 0 ? .white : (relative > 0 ? .red : .green))
-                                    .font(.subheadline)
+                ForEach(playerNames.indices, id: \.self) { playerIndex in
+                    PlayerResultCard(
+                        playerName: playerNames[playerIndex],
+                        scores: scores[playerIndex],
+                        roundCount: roundCount,
+                        isExpanded: expandedPlayer == playerIndex,
+                        onToggleExpand: {
+                            withAnimation {
+                                expandedPlayer = (expandedPlayer == playerIndex ? nil : playerIndex)
                             }
-                            .multilineTextAlignment(.center)
+                        }
+                    )
+                }
+            }
+            .padding()
+        }
+    }
+}
+
+struct PlayerResultCard: View {
+    let playerName: String
+    let scores: [[String]] // [hole][round]
+    let roundCount: Int
+    let isExpanded: Bool
+    let onToggleExpand: () -> Void
+
+    var body: some View {
+        Button(action: onToggleExpand) {
+            VStack(spacing: 12) {
+                Text(playerName)
+                    .font(.title2)
+                    .bold()
+
+                HStack(spacing: 12) {
+                    ForEach(0..<roundCount, id: \.self) { roundIndex in
+                        let total = scores.compactMap {
+                            $0.indices.contains(roundIndex) ? Int($0[roundIndex]) : nil
+                        }.reduce(0, +)
+                        let relative = total - 36
+
+                        VStack {
+                            Text("\(total)")
+                            Text(relative == 0 ? "(0)" : (relative > 0 ? "+\(relative)" : "\(relative)"))
+                                .foregroundColor(relative == 0 ? .white : (relative > 0 ? .red : .green))
+                                .font(.subheadline)
                         }
                     }
-
-                    // Average
-                    let totals = (0..<roundCount).map { roundIndex in
-                        scores[playerIndex].compactMap { Int($0[roundIndex]) }.reduce(0, +)
-                    }
-
-                    if !totals.isEmpty {
-                        let average = Double(totals.reduce(0, +)) / Double(totals.count)
-                        Text(String(format: "Snitt: %.1f", average))
-                            .font(.footnote)
-                            .foregroundColor(.white.opacity(0.8))
-                    }
-
-                    // Count of 1s, 2s, 3s
-                    let flattenedScores = scores[playerIndex].flatMap { $0 }
-                    let ones = flattenedScores.filter { $0 == "1" }.count
-                    let twos = flattenedScores.filter { $0 == "2" }.count
-                    let threes = flattenedScores.filter { $0 == "3" }.count
-
-                    HStack(spacing: 5) {
-                        Text("\(ones)")
-                        Text("/ \(twos)")
-                        Text("/ \(threes)")
-                    }
-                    .font(.caption)
-                    .foregroundColor(.white.opacity(0.7))
-
                 }
-                .padding()
-                .background(backgroundColor.gradient.opacity(0.9))
-                .cornerRadius(16)
-                .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 4)
-            }
 
-            
+                if isExpanded {
+                    ScorePerRoundChart(scores: scores)
+                        .frame(height: 150)
 
-            Spacer()
-        }
-        .padding()
-        .fileExporter(
-            isPresented: $showExporter,
-            document: exportFile,
-            contentType: .plainText,
-            defaultFilename: exportFileName
-        ) { result in
-            switch result {
-            case .success:
-                print("✅ File saved successfully.")
-            case .failure(let error):
-                print("❌ Error saving file: \(error.localizedDescription)")
-            }
-        }
+                    ScoreDistributionChart(scores: scores)
+                        .frame(height: 150)
 
-        .alert("Resultat sparat!", isPresented: $saveConfirmation) {
-            Button("OK", role: .cancel) { }
-        }
-        .alert("Det gick inte att spara filen", isPresented: $saveError) {
-            Button("OK", role: .cancel) { }
-        }
-        .frame(maxWidth: .infinity) // Center the outer VStack in parent
-    }
-    func generateCSVText() -> String {
-        var csv = ""
-
-        for playerIndex in playerNames.indices {
-            for roundIndex in 0..<roundCount {
-                var row = "\(playerNames[playerIndex]),\(roundIndex + 1)"
-                for holeIndex in 0..<scores[playerIndex].count {
-                    let score = scores[playerIndex][holeIndex][roundIndex]
-                    row += ",\(score.isEmpty ? "-" : score)"
+                    DeltaOverTimeChart(scores: scores)
+                        .frame(height: 150)
                 }
-                csv += row + "\n"
             }
+            .padding()
+            .background(backgroundColor(for: playerName))
+            .cornerRadius(16)
+            .shadow(radius: 4)
+            .animation(.easeInOut(duration: 0.3), value: isExpanded)
         }
-
-        return csv
+        .buttonStyle(PlainButtonStyle())
     }
 
-
-
-
+    private func backgroundColor(for name: String) -> Color {
+        switch name.uppercased() {
+        case "W": return Color.blue.opacity(0.3)
+        case "A": return Color.green.opacity(0.3)
+        case "D": return Color.red.opacity(0.3)
+        default: return Color.gray.opacity(0.2)
+        }
+    }
 }
-import UniformTypeIdentifiers
 
-struct TextFile: FileDocument {
-    static var readableContentTypes = [UTType.plainText]
-    var text = ""
+struct ScorePerRoundChart: View {
+    let scores: [[String]] // [hole][round]
 
-    init(initialText: String = "") {
-        text = initialText
-    }
+    var body: some View {
+        let roundCount = scores.first?.count ?? 0
+        let data = (0..<roundCount).map { roundIndex in
+            scores.compactMap { Int($0[roundIndex]) }.reduce(0, +)
+        }
 
-    init(configuration: ReadConfiguration) throws {
-        if let data = configuration.file.regularFileContents {
-            text = String(decoding: data, as: UTF8.self)
+        Chart {
+            ForEach(data.indices, id: \.self) { i in
+                BarMark(
+                    x: .value("Runda", "Runda \(i+1)"),
+                    y: .value("Poäng", data[i])
+                )
+            }
         }
     }
+}
 
-    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
-        let data = Data(text.utf8)
-        return FileWrapper(regularFileWithContents: data)
+struct ScoreDistributionChart: View {
+    let scores: [[String]] // [hole][round]
+
+    var body: some View {
+        let flat = scores.flatMap { $0 }
+        let counts: [String: Int] = ["1", "2", "3"].reduce(into: [:]) { dict, key in
+            dict[key] = flat.filter { $0 == key }.count
+        }
+
+        Chart {
+            ForEach(["1", "2", "3"], id: \.self) { score in
+                BarMark(
+                    x: .value("Poäng", score),
+                    y: .value("Antal", counts[score] ?? 0)
+                )
+            }
+        }
+    }
+}
+
+struct DeltaOverTimeChart: View {
+    let scores: [[String]] // [hole][round]
+    var deltas: [Double] {
+        var values: [Double] = []
+        var total = 0
+        for i in 0..<scores.count {
+            let stroke = scores[i].compactMap { Int($0) }.first ?? 0
+            total += stroke
+            let delta = Double(total) - Double(i + 1) * 2
+            values.append(delta)
+        }
+        return values
+    }
+
+    var body: some View {
+        Chart {
+            ForEach(deltas.indices, id: \.self) { i in
+                LineMark(
+                    x: .value("Hål", i + 1),
+                    y: .value("Delta", deltas[i])
+                )
+            }
+        }
     }
 }
 
@@ -182,6 +164,6 @@ struct TextFile: FileDocument {
 #Preview {
     GameView(
         playerNames: ["W", "A", "D"],
-        roundCount: 4
+        roundCount: 1
     )
 }
