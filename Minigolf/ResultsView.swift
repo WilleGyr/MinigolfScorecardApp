@@ -1,5 +1,6 @@
 import SwiftUI
 import Charts
+import UIKit
 
 struct ResultsView: View {
     let playerNames: [String]
@@ -14,7 +15,6 @@ struct ResultsView: View {
                 Text("Resultat")
                     .font(.largeTitle)
                     .bold()
-
                 ForEach(playerNames.indices, id: \.self) { playerIndex in
                     Button(action: {
                         withAnimation(.easeInOut(duration: 0.3)) {
@@ -38,6 +38,18 @@ struct ResultsView: View {
             .padding()
         }
     }
+
+    func generateCSV() -> String {
+        var lines: [String] = ["Spelare,Hål,Runda,Poäng"]
+        for (playerIndex, player) in playerNames.enumerated() {
+            for (holeIndex, hole) in scores[playerIndex].enumerated() {
+                for (roundIndex, score) in hole.enumerated() {
+                    lines.append("\(player),\(holeIndex + 1),\(roundIndex + 1),\(score)")
+                }
+            }
+        }
+        return lines.joined(separator: "\n")
+    }
 }
 
 struct PlayerResultCard: View {
@@ -46,12 +58,25 @@ struct PlayerResultCard: View {
     let roundCount: Int
     let isExpanded: Bool
 
+    var averageTotal: Double {
+        let totals = (0..<roundCount).map { roundIndex in
+            scores.compactMap {
+                $0.indices.contains(roundIndex) ? Int($0[roundIndex]) : nil
+            }.reduce(0, +)
+        }
+        return totals.isEmpty ? 0 : Double(totals.reduce(0, +)) / Double(totals.count)
+    }
+
     var body: some View {
         VStack(spacing: 12) {
             VStack(spacing: 12) {
                 Text(playerName)
                     .font(.title2)
                     .bold()
+
+                Text("Snitt: \(String(format: "%.1f", averageTotal))")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
 
                 HStack(spacing: 12) {
                     ForEach(0..<roundCount, id: \.self) { roundIndex in
@@ -116,6 +141,10 @@ struct ScorePerRoundChart: View {
                     x: .value("Runda", "Runda \(i+1)"),
                     y: .value("Poäng", data[i])
                 )
+                .annotation(position: .top) {
+                    Text("\(data[i])")
+                        .font(.caption)
+                }
             }
         }
     }
@@ -136,6 +165,10 @@ struct ScoreDistributionChart: View {
                     x: .value("Poäng", score),
                     y: .value("Antal", counts[score] ?? 0)
                 )
+                .annotation(position: .top) {
+                    Text("\(counts[score] ?? 0)")
+                        .font(.caption)
+                }
             }
         }
     }
@@ -145,11 +178,13 @@ struct DeltaOverTimeChart: View {
     let scores: [[String]] // [hole][round]
     var deltas: [Double] {
         var values: [Double] = []
-        var total = 0
-        for i in 0..<scores.count {
-            let stroke = scores[i].compactMap { Int($0) }.first ?? 0
-            total += stroke
-            let delta = Double(total) - Double(i + 1) * 2
+        var strokesSoFar = 0
+        var holesPlayed = 0
+        for holeScores in scores {
+            let score = holeScores.compactMap { Int($0) }.first ?? 0
+            holesPlayed += 1
+            strokesSoFar += score
+            let delta = Double(strokesSoFar) - Double(holesPlayed * 2)
             values.append(delta)
         }
         return values
@@ -167,10 +202,9 @@ struct DeltaOverTimeChart: View {
     }
 }
 
-// Preview
 #Preview {
     GameView(
-        playerNames: ["W", "A", "D"],
+        playerNames: ["W", "A"],
         roundCount: 1
     )
 }
