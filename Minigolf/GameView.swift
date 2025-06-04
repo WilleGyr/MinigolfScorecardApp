@@ -40,31 +40,45 @@ struct GameView: View {
                                 .ignoresSafeArea()
 
                             VStack {
-                                HStack(spacing: 8) {
-                                    ForEach(playerNames.indices, id: \.self) { index in
+                                VStack(spacing: 4) {
+                                    HStack {
                                         Button(action: {
-                                            withAnimation {
-                                                selectedTab = index
-                                            }
+                                            focusedField = nil
                                         }) {
-                                            Text(playerNames[index])
-                                                .font(.system(size: 20, weight: .bold))
-                                                .frame(width: 40, height: 40)
-                                                .background(selectedTab == index ? Color.gray.opacity(0.3) : Color.blue)
-                                                .foregroundColor(.white)
-                                                .clipShape(Circle())
-                                                .padding(5)
+                                            Text("Dölj tangentbord")
+                                                .font(.caption)
+                                                .padding(6)
+                                                .background(Color.gray.opacity(0.3))
+                                                .cornerRadius(8)
+                                        }
+                                        Spacer()
+                                    }
+                                    .padding(.horizontal, 10)
 
+                                    HStack(spacing: 8) {
+                                        ForEach(playerNames.indices, id: \.self) { index in
+                                            Button(action: {
+                                                withAnimation {
+                                                    selectedTab = index
+                                                }
+                                            }) {
+                                                Text(playerNames[index])
+                                                    .font(.system(size: 20, weight: .bold))
+                                                    .frame(width: 40, height: 40)
+                                                    .background(selectedTab == index ? Color.gray.opacity(0.3) : Color.blue)
+                                                    .foregroundColor(.white)
+                                                    .clipShape(Circle())
+                                                    .padding(5)
+                                            }
                                         }
                                     }
-
                                 }
                                 .padding(.top)
+
 
                                 ScrollView(.horizontal) {
                                     ScrollView(.vertical) {
                                         VStack(spacing: 1) {
-                                            // Header row
                                             HStack(spacing: 1) {
                                                 Text("Hål")
                                                     .frame(width: 40)
@@ -78,7 +92,6 @@ struct GameView: View {
 
                                             Divider()
 
-                                            // Hole rows
                                             ForEach(0..<holeCount, id: \.self) { holeIndex in
                                                 HStack(spacing: 1) {
                                                     Text("\(holeIndex + 1)")
@@ -92,7 +105,7 @@ struct GameView: View {
                                                             .frame(width: 80)
                                                             .multilineTextAlignment(.center)
                                                             .textFieldStyle(RoundedBorderTextFieldStyle())
-                                                            .foregroundColor(colorForScore(scores[playerIndex][holeIndex][roundIndex])) // <-- Add this line
+                                                            .foregroundColor(colorForScore(scores[playerIndex][holeIndex][roundIndex]))
                                                             .focused($focusedField, equals: .field(player: playerIndex, hole: holeIndex, round: roundIndex))
                                                             .submitLabel(.next)
                                                             .onSubmit {
@@ -106,7 +119,6 @@ struct GameView: View {
                                                                 }
                                                             }
                                                     }
-
                                                 }
                                             }
 
@@ -154,8 +166,6 @@ struct GameView: View {
                     }
                 }
                 .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
-                .toolbar {
-                }
 
                 NavigationLink(
                     destination: ResultsView(playerNames: playerNames, scores: scores, roundCount: roundCount),
@@ -179,7 +189,6 @@ struct GameView: View {
                 }
                 .padding(.trailing, 10)
                 .padding(.top, 20)
-
             }
             .toolbarBackground(backgroundColor(for: playerNames[selectedTab]), for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
@@ -195,7 +204,7 @@ struct GameView: View {
         }
         return 0
     }
-    
+
     private func colorForScore(_ score: String) -> Color {
         switch score {
         case "1": return .green
@@ -204,7 +213,6 @@ struct GameView: View {
         default: return .primary
         }
     }
-
 
     private func moveToNextField() {
         guard let currentField = focusedField else { return }
@@ -218,7 +226,6 @@ struct GameView: View {
                 withAnimation {
                     selectedTab = newPlayer
                 }
-                // Wait for tab switch to finish before setting focus
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     focusedField = .field(player: newPlayer, hole: hole, round: 0)
                 }
@@ -232,7 +239,6 @@ struct GameView: View {
             }
         }
     }
-
 
     private func moveToPreviousField() {
         guard let currentField = focusedField else { return }
