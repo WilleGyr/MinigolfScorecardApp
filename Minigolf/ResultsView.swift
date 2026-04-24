@@ -7,6 +7,7 @@ struct ResultsView: View {
     let roundCount: Int
 
     @State private var expandedPlayer: Int? = nil
+    @State private var showShareSheet = false
 
     static let accentColors: [Color] = [.mint, .indigo, .orange, .pink, .purple, .teal]
 
@@ -55,6 +56,57 @@ struct ResultsView: View {
         }
         .navigationTitle("Resultat")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    showShareSheet = true
+                } label: {
+                    Image(systemName: "square.and.arrow.up")
+                }
+                .sheet(isPresented: $showShareSheet) {
+                    ShareSheet(activityItems: [generateScorecard()])
+                }
+            }
+        }
+    }
+
+    func generateScorecard() -> String {
+        let date = Date().formatted(date: .abbreviated, time: .omitted)
+        var lines: [String] = ["Minigolf • \(date)", ""]
+
+        let roundHeaders = (1...roundCount).map { "R\($0)" }.joined(separator: "  ")
+        let holeWidth = 4
+
+        for playerIndex in playerNames.indices {
+            lines.append(playerNames[playerIndex].uppercased())
+
+            // Header row
+            var header = "Hål ".padding(toLength: holeWidth + 2, withPad: " ", startingAt: 0)
+            header += roundHeaders
+            lines.append(header)
+
+            // Hole rows
+            for hole in 0..<18 {
+                var row = "\(hole + 1).".padding(toLength: holeWidth + 2, withPad: " ", startingAt: 0)
+                row += (0..<roundCount).map { r in
+                    let s = scores[playerIndex][hole][r]
+                    let str = s.map { "\($0)" } ?? "-"
+                    return str.padding(toLength: 4, withPad: " ", startingAt: 0)
+                }.joined()
+                lines.append(row)
+            }
+
+            // Totals row
+            var totRow = "Tot ".padding(toLength: holeWidth + 2, withPad: " ", startingAt: 0)
+            totRow += (0..<roundCount).map { r in
+                let total = scores[playerIndex].compactMap { $0[r] }.reduce(0, +)
+                return "\(total)".padding(toLength: 4, withPad: " ", startingAt: 0)
+            }.joined()
+            lines.append(totRow)
+            lines.append("")
+        }
+
+        return lines.joined(separator: "\n")
     }
 }
 
