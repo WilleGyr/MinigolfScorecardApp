@@ -2,8 +2,6 @@
 
 # ⛳ Minigolf Scorecard App
 
-*Track your minigolf rounds with elegance and ease.*
-
 [![License: MIT](https://img.shields.io/badge/License-MIT-maroon.svg)](LICENSE)
 [![Swift](https://img.shields.io/badge/Language-Swift-ffac45.svg?logo=swift)](https://swift.org/)
 [![Release](https://img.shields.io/badge/Release-v1.0.0-blue)](https://github.com/willegyr/MinigolfScorecardApp/releases/tag/v1.0.0)
