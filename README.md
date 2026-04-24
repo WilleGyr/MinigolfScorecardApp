@@ -59,12 +59,7 @@
 ## Roadmap
 
 - [x] Multi-round tracking
-- [x] CSV export
 - [x] Share results
-- [x] Light/Dark mode support
-- [ ] iCloud sync
-- [ ] Handicap support
-- [ ] Course library
 
 ## License
 
