@@ -145,11 +145,6 @@ struct PlayerResultCard: View {
                             DistributionBarChart(scores: scores, accentColor: accentColor)
                                 .frame(height: 140)
                         }
-
-                        chartSection(title: "SCORE ÖVER TID") {
-                            DeltaLineChart(scores: scores, accentColor: accentColor)
-                                .frame(height: 140)
-                        }
                     }
                     .padding(.bottom, 16)
                     .transition(.opacity.combined(with: .move(edge: .top)))
@@ -250,64 +245,6 @@ struct DistributionBarChart: View {
         .chartYAxis(.hidden)
         .chartXAxis {
             AxisMarks { _ in AxisValueLabel().font(.caption) }
-        }
-    }
-}
-
-struct DeltaLineChart: View {
-    let scores: [[Int?]]
-    let accentColor: Color
-
-    struct Point: Identifiable {
-        let id: Int
-        let delta: Double
-    }
-
-    var points: [Point] {
-        var result: [Point] = []
-        var total = 0
-        var played = 0
-        for (i, holeScores) in scores.enumerated() {
-            guard let s = holeScores.compactMap({ $0 }).first else { continue }
-            total += s
-            played += 1
-            result.append(Point(id: i + 1, delta: Double(total) - Double(played * 2)))
-        }
-        return result
-    }
-
-    var body: some View {
-        Chart {
-            ForEach(points) { pt in
-                LineMark(
-                    x: .value("Hål", pt.id),
-                    y: .value("Delta", pt.delta)
-                )
-                .foregroundStyle(accentColor)
-                .interpolationMethod(.catmullRom)
-
-                AreaMark(
-                    x: .value("Hål", pt.id),
-                    y: .value("Delta", pt.delta)
-                )
-                .foregroundStyle(accentColor.opacity(0.08))
-                .interpolationMethod(.catmullRom)
-            }
-
-            RuleMark(y: .value("Par", 0))
-                .lineStyle(StrokeStyle(lineWidth: 1, dash: [4]))
-                .foregroundStyle(Color.secondary.opacity(0.4))
-        }
-        .chartYAxis {
-            AxisMarks { _ in
-                AxisGridLine()
-                AxisValueLabel().font(.caption)
-            }
-        }
-        .chartXAxis {
-            AxisMarks(values: .stride(by: 3)) { _ in
-                AxisValueLabel().font(.caption)
-            }
         }
     }
 }
